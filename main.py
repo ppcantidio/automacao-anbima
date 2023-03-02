@@ -9,29 +9,27 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-class Main:
-    def __init__(self):
-        if os.path.exists("./files") is False:
-            os.mkdir("./files")
+if os.path.exists("./files") is False:
+    os.mkdir("./files")
 
-        caminho = str(os.path.dirname(os.path.abspath(__file__))) + "\\files\\"
+caminho = str(os.path.dirname(os.path.abspath(__file__))) + "\\files\\"
 
-        options = Options()
-        options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        options.add_experimental_option("detach", True)
-        prefs = {
-            "profile.default_content_settings.popups": 0,
-            "download.default_directory": caminho,  # IMPORTANT - ENDING SLASH V IMPORTANT
-            "directory_upgrade": True,
-        }
-        options.add_experimental_option("prefs", prefs)
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        self.url = "https://data.anbima.com.br/certificado-de-recebiveis"
+options = Options()
+options.add_experimental_option("excludeSwitches", ["enable-logging"])
+options.add_experimental_option("detach", True)
+prefs = {
+    "profile.default_content_settings.popups": 0,
+    "download.default_directory": caminho,  # IMPORTANT - ENDING SLASH V IMPORTANT
+    "directory_upgrade": True,
+}
+options.add_experimental_option("prefs", prefs)
+options.add_argument("--headless=new")
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    def main_process(self):
-        self.driver.get(self.url)
-        self.driver.find_element(By.CLASS_NAME, "pop-up--close-btn").click()
-        self.driver.find_element(By.CLASS_NAME, "anbima-ui-toolbar__link").click()
+url = "https://data.anbima.com.br/certificado-de-recebiveis"
 
-
-Main().main_process()
+driver.get(url)
+print("Acessando website")
+driver.find_element(By.CLASS_NAME, "pop-up--close-btn").click()
+driver.find_element(By.CLASS_NAME, "anbima-ui-toolbar__link").click()
+print("Download realizado com sucesso")
